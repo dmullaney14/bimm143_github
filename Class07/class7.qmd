@@ -1,0 +1,149 @@
+---
+title: "Class 7: Machine Learning 1"
+author: "Dylan Mullaney"
+format: pdf
+---
+
+Today we will explore unsupervised machine learning methods uncluding clustering and dimensionality reduction methods.
+
+Let's start by making up some data (where we know there are clear groups) that we can use to test out different clustering methods.  
+
+We can use the 'rnorm()' function to help us here:
+- has three input values (n, mean, sd)
+- mean and sd have defaults, set as equals to a value
+
+```{r}
+#rnorm(n, mean=0, sd=1)
+rnorm (30)
+
+hist(rnorm(3000))
+
+hist(rnorm(3000, mean=3))
+```
+
+Make data with two "clusters". Use c and a comma to combine these two vector sets of data.
+
+```{r}
+x<- c(rnorm(30, mean=3),
+rnorm(30, mean=-3))
+
+z<- cbind(x=x, y=rev(x)) ##rev reverses the data
+head(z)
+plot(z)
+```
+
+##K-means clustering
+
+The main function in "base" R for K-means clustering is called 'kmeans()'
+
+There are 6 inputs:
+- Only two don't have defaults, 'x' and 'centers'
+
+
+```{r}
+k<- kmeans(z, 2)
+k
+
+```
+
+What are the details of the data?
+
+```{r}
+attributes(k)
+```
+
+> Q. How many points lie in each cluster?
+
+```{r}
+k$size
+```
+
+> Q. What component of ous results tells us about cluster membership? --> which point is in which cluster
+
+```{r}
+k$cluster
+```
+
+> Q. Put this result info together and make a "base R" plot of our clustering results. Add the cluster center points to this plot. 
+
+```{r}
+plot(z, col= "blue")
+```
+
+I want each of the clusters to be colored differently. 
+
+```{r}
+plot(z, col=c("blue", "red"))
+# Will alternate back and forth between both colors
+```
+You can color by number in the data set.
+
+```{r}
+plot(z, col= c(1,2))
+```
+
+Plot colored by cluster membership 
+-pch is plotting character to change the type of dot
+```{r}
+plot(z, col=k$cluster)
+ points(k$centers, col="blue", pch=15)
+```
+
+> Q. Run kmeans on our input 'z' and define 4 clusters makes the same result visualization plot as above - plot colored by cluster membership. 
+
+```{r}
+k4<- kmeans(z, 4)
+k4
+```
+
+```{r}
+plot(z, col=k4$cluster)
+```
+
+Is this good clustering? No not really but how do we know
+
+```{r}
+k4$withinss
+```
+
+## Hierarchical Clustering --> hclust()
+
+The main function in base R is called hclust(). It will take as input a distance matrix (key point is that you can't just give your "raw" data as input - you have to first calculate a distance matrix from your data).
+
+```{r}
+d <- dist(z)
+hc <- hclust(d)
+hc
+```
+```{r}
+plot(hc)
+```
+
+Once I inspect the "tree", I can "cut" the tree to yield my groupings/clusters. The function to do this is called 'cutree()'.
+
+```{r}
+grps<- cutree(hc, h=10)
+grps
+```
+
+```{r}
+plot(z, col=grps)
+```
+
+## Dimensionality Reduction - Principal Component Analysis (PCA)
+- Objective: reduce the features dimensionality whie only losing a small amount of information
+- Visualize multidimensional data more reasonably
+- Use as a filter yp pass to other machine learning methods
+- Big funnel, lots of data in, something we can make sense of out
+
+```{r}
+
+```
+
+
+
+
+
+
+
+

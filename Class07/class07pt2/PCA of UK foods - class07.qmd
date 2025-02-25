@@ -1,0 +1,304 @@
+---
+title: "Class 7 Lab"
+author: "Dylan Mullaney (A16869792)"
+format: pdf
+---
+
+## Hands on with Principal Component Analysis
+
+Examine a 17-dimensional data detailing food consumption in England, Wales, Scotland, and Northern Ireland. 
+
+Read the provide input file
+
+> Q1. How many rows and columns are in your new data frame named x? What R functions could you use to answer this questions?
+
+17 rows, 5 columns, using nrow() and ncol()
+```{r}
+url<- "https://tinyurl.com/UK-foods"
+x <- read.csv(url) ##To remove numbers from row, could add ', row.names=1' after url 
+nrow(x)
+ncol(x)
+head(x)
+#View(x)
+```
+
+Remove the first column so it starts with the value of each food and not a number
+
+```{r}
+rownames(x) <- x[,1]
+x <- x[,-1]
+head(x)
+dim(x)
+#DO NOT run again, will remove another column, can be fixed by rerunning code above so that x is the initial value again
+```
+> Q2. Which approach to solving the ‘row-names problem’ mentioned above do you prefer and why? Is one approach more robust than another under certain circumstances?
+
+The minus indexing technique can be tricky because it requires that you only run functional code once or else it will continue to remove values from the dataset. For this reason, I think the technique below might be more functional. 
+` x <- read.csv(url, row.names=1) `
+
+Make a fun rainbow plot of this data
+
+```{r}
+barplot(as.matrix(x), beside=T, col=rainbow(nrow(x)))
+```
+
+> Q3: Changing what optional argument in the above barplot() function results in the following plot?
+
+Setting 'beside' as equal to "F". The beside line of code changes the arrangement of the bars in the plot.
+
+```{r}
+barplot(as.matrix(x), beside=F, col=rainbow(nrow(x)))
+```
+
+> Q5: Generating all pairwise plots may help somewhat. Can you make sense of the following code and resulting figure? What does it mean if a given point lies on the diagonal for a given plot?
+
+This kind of display is only workable with small datasets and is called a scatterplot matrix. Each variable is listed in a line and plotted against each other. In the first row, England is the y axis. The x axis depends on the other intersecting country. So, row 1 is England as y axis and column 1 is England as x axis. If a point lies on a diagonal, it means that there is a perfect correlation between the two variables, ie they are both the same value.   
+
+```{r}
+pairs(x, col=rainbow(nrow(x)), pch=16)
+```
+
+Looking at these types of "pairwise plots" can be helpful but it does not scale well and kind of sucks (time consuming, laborious, error prone)!
+
+> Q6. What is the main differences between N. Ireland and the other countries of the UK in terms of this data-set?
+
+N. Ireland has a noticeable difference in the bright green dot towards the center of the dataset, as it lies astray from the diagonal line. However, it is hard to deduce much specifically with so many variables and different plots.  
+
+### PCA to the rescue
+
+The main function for PCA in base R is called 'prcomp()'. This function wants the transpose of our input data - i.e. the important food categories in as columns and the countries as rows. 
+
+```{r}
+pca <- prcomp (t(x))
+summary (pca)
+```
+
+The 'pca$x' result object is where we will focus first as this details how the countries are related to each other in terms of our new "axis" (ie "PCs", "eigenvectors", etc.).
+
+```{r}
+head(pca$x)
+```
+
+Q7. Complete the code below to generate a plot of PC1 vs PC2. The second line adds text labels over the data points.
+plot(pca$x[,1], pca$x [,2], pch=16, col=c("orange", "red", "blue", "darkgreen"), 
+     xlab="PC1", ylab= "PC2", xlim=c(-270,500), 
+     text(pca$x[,1], pca$x[,2], colnames(x)))
+
+```{r}
+pca$x [,2] <- -pca$x [,2]
+#PCA1 is correct, PCA2 is opposite for some reason? Y axis needs to be mult by -1
+plot(pca$x[, 1], pca$x[, 2], xlab="PC1", ylab="PC2", xlim=c(-270,500))
+text(pca$x[, 1], pca$x[, 2], colnames(x))
+
+```
+
+Q8. Customize your plot so that the colors of the country names match the colors in our UK and Ireland map and table at start of this document.
+
+```{r}
+plot(pca$x[,1], pca$x [,2],
+     xlab="PC1", ylab= "PC2", xlim=c(-270,500), 
+     text(pca$x[,1], pca$x[,2], colnames(x), col=c("orange", "red", "blue", "darkgreen")))
+```
+
+How much variation in the original data set does each PC account for (by proportion to 100)?
+
+```{r}
+v <- round (pca$sdev^2/sum(pca$sdev^2)*100)
+v
+```
+
+Summarize as a barplot
+```{r}
+barplot(v, xlab="Principal Component", ylab="Percent Variation")
+```
+
+## Variable Loadings
+
+We can look at the so-caled PC loadings result to see how the original foods contribute to our new PCs (ie how the original variables contribute to our new, better variables).
+
+```{r}
+pca$rotation[,1]
+```
+Positive values indicate more impact than others, negative values indicate less impact than others
+
+
+```{r}
+#Graphical focus on PC1, largest positive loading scores 'push' N. Ireland to the right positive side of the graph
+par(mar=c(10,3,0.35,0))
+barplot(pca$rotation[,1], las=2)
+```
+
+> Q9: Generate a similar ‘loadings plot’ for PC2. What two food groups feature prominantely and what does PC2 maninly tell us about?
+
+Fresh potatoes and soft drink are the most dominant bars in this graph. Soft drinks are significantly higher than average and fresh potatoes are significantly lower. 
+
+```{r}
+par(mar=c(10,3,0.35,0))
+barplot(pca$rotation[,2], las=2)
+```
+
+## Using ggplot for figures
+
+```{r}
+library(ggplot2)
+
+df <- as.data.frame(pca$x)
+df_lab <- tibble::rownames_to_column(df, "Country")
+
+ggplot(df_lab) + 
+  aes(PC1, PC2, col=Country) + 
+  geom_point()
+```
+
+Fancier but a pain to make graph
+
+```{r}
+ggplot(df_lab) + 
+  aes(PC1, PC2, col=Country, label=Country) + 
+  geom_hline(yintercept = 0, col="gray") +
+  geom_vline(xintercept = 0, col="gray") +
+  geom_point(show.legend = FALSE) +
+  geom_label(hjust=1, nudge_x = -10, show.legend = FALSE) +
+  expand_limits(x = c(-300,500)) +
+  xlab("PC1 (67.4%)") +
+  ylab("PC2 (28%)") +
+  theme_bw()
+
+```
+
+Plot of loadings and PC contributions
+
+```{r}
+ld <- as.data.frame(pca$rotation)
+ld_lab <- tibble::rownames_to_column(ld, "Food")
+
+ggplot(ld_lab) +
+  aes(PC1, Food) +
+  geom_col()
+```
+
+Prettier one
+
+```{r}
+ggplot(ld_lab) +
+  aes(PC1, reorder(Food, PC1), bg=PC1) +
+  geom_col() + 
+  xlab("PC1 Loadings/Contributions") +
+  ylab("Food Group") +
+  scale_fill_gradient2(low="purple", mid="gray", high="darkgreen", guide=NULL) +
+  theme_bw()
+```
+
+Biplots are a good option for small datasets. There is a central group of red aroows pointing to the red word labels for each variable.
+
+```{r}
+biplot(pca)
+```
+
+## PCA of RNA-seq data
+
+```{r}
+url2 <- "https://tinyurl.com/expression-CSV"
+rna.data <- read.csv(url2, row.names=1)
+head(rna.data)
+```
+
+> Q10: How many genes and samples are in this data set?
+
+10 genes, 100 samples
+
+```{r}
+dim(rna.data)
+```
+
+Run a PCA and plot the results
+
+```{r}
+pca <- prcomp(t(rna.data), scale=TRUE)
+#what does the t indicate here?
+plot(pca$x[,1], pca$x[,2], xlab="PC1", ylab="PC2")
+```
+
+```{r}
+summary(pca)
+```
+Notice 92% of variance is contained in PC1.
+
+```{r}
+plot(pca, main="Quick scree plot")
+```
+
+Let's make the scree plot on our own. 
+
+```{r}
+# Variance captured per PC 
+pca.var <- pca$sdev^2
+
+#percent variance
+pca.var.per <- round(pca.var/sum(pca.var)*100, 1)
+pca.var.per
+```
+
+```{r}
+barplot(pca.var.per, main= "My Scree Plot", 
+        names.arg= paste0("PC", 1:10), 
+        xlab="Principal Component", ylab="% Variation")
+```
+
+More attractive and more useful, labeling specific points by name and with colors 
+
+```{r}
+colvec <- colnames(rna.data)
+colvec[grep("wt", colvec)] <- "red"
+colvec[grep("ko", colvec)] <- "blue"
+
+plot(pca$x[,1], pca$x[,2], col=colvec, pch=16,
+     xlab=paste0("PC1 (", pca.var.per[1], "%)"),
+     ylab=paste0("PC2 (", pca.var.per[2], "%)"))
+
+text(pca$x[,1], pca$x[,2], labels = colnames(rna.data), pos=c(rep(4,5), rep(2,5)))
+```
+
+Let's graph it by ggplot
+
+```{r}
+library(ggplot2)
+
+df <- as.data.frame(pca$x)
+
+ggplot(df) + 
+  aes(PC1, PC2) + 
+  geom_point()
+```
+
+Add a condition specific color, sample label aesthetic for WT vs knockout
+
+```{r}
+df$samples <- colnames(rna.data) 
+df$condition <- substr(colnames(rna.data),1,2)
+
+p <- ggplot(df) + 
+        aes(PC1, PC2, label=samples, col=condition) + 
+        geom_label(show.legend = FALSE)
+p
+```
+
+Add title, caption, x and y specificity, and a theme
+
+```{r}
+p + labs(title="PCA of RNASeq Data",
+       subtitle = "PC1 clealy seperates wild-type from knock-out samples",
+       x=paste0("PC1 (", pca.var.per[1], "%)"),
+       y=paste0("PC2 (", pca.var.per[2], "%)"),
+       caption="Class example data") +
+     theme_bw()
+```
+
+
+
+
+
+
+
+
+
