@@ -1,0 +1,182 @@
+---
+title: "Class 5: Data Vis with ggplot"
+author: "Dylan Mullaney"
+format: pdf
+---
+
+## Intro to ggplot
+
+There are many graphics systems in R (ways to make plots and figures). These include "base" R plots. Today we will focus mostly on the **ggplot2** package. 
+
+Let's start with a plot of a simple in-built dataset called 'cars'.
+
+```{r}
+cars
+```
+
+```{r}
+plot(cars)
+```
+
+Let's see how we can make this figure using **ggplot**. First I need to install this package on my computer. To install any R package I use thfunction `install.packages()`
+
+> I will run `install.packages()` im my R console, not this Quarto so I don't have to reinstall every time that I render.
+
+Before I can use any functions from add-on packages I need to load the package from my "library()" with the  "library(ggplot2)" call. 
+
+```{r}
+library(ggplot2)
+ggplot(cars)
+```
+
+All ggplot figures have at least 3 things (called layers). These include:
+
+- **data** (the imput dataset I want to plot from)
+- **aes** (the aesthetic mapping of the data to my plot)
+- **geoms** (the geom_point(), geom_line(), etc that I want to draw from )
+
+```{r}
+ggplot(cars) + 
+  aes(x= speed, y= dist) +
+  geom_point()
+
+```
+
+
+Use base R plots for data that you want to see but don't need a nice, polished graph. ggplot is more work, but more editable for nicer representations. 
+
+Let's add a line to show the relationship here:
+
+```{r}
+ggplot(cars) +
+  aes(x= speed, y= dist) +
+  geom_point() +
+  geom_smooth (method="lm") +
+  theme_bw() +
+  labs(title= "My first GGPLOT")
+```
+
+1. Which geometric layer should be used to create scatter plots in ggplot2? 
+
+geom_point()
+
+
+## Gene expression figure
+
+The code to read the dataset, retrieving online from class dataset
+
+```{r}
+url <- "https://bioboot.github.io/bimm143_S20/class-material/up_down_expression.txt"
+genes <- read.delim(url)
+head(genes)
+```
+
+> How many genes are in this dataset?
+
+```{r}
+nrow(genes)
+```
+A first plot of this dataset
+
+```{r}
+p <- ggplot(genes) +
+  aes(x=Condition1, y=Condition2, col= State) +
+  geom_point()
+
+colnames(genes)
+ncol(genes)
+
+## Graphical representation of the State values
+table(genes$State)
+
+## Graphical representation of the State values div by total # of genes
+round(table(genes$State)/nrow(genes) *100, 2)
+
+## Default color scheme
+p
+
+## Personalized color scheme
+p + scale_color_manual(values= c("blue", "gray", "red"))
+```
+Lets add some labels and a title
+
+```{r}
+ggplot(genes) +
+  aes(x=Condition1, y=Condition2, col= State) +
+  geom_point() +
+  theme_bw() +
+  labs(title= "Gene Expression changes upon drug treatment", 
+       x= "Control Expression", 
+       y= " Drug Presence Expression") +
+  scale_color_manual(values= c("blue", "gray", "red"))
+
+```
+ Defining the graph as an object makes it easier to edit or have multiple versions without having to rewrite the entire code again
+ 
+```{r}
+p + labs(title="Hello")
+```
+
+7. Going further
+
+```{r}
+# File location online
+url <- "https://raw.githubusercontent.com/jennybc/gapminder/master/inst/extdata/gapminder.tsv"
+
+gapminder <- read.delim(url)
+
+head(gapminder)
+
+#install.packages("dplyr")  ## un-comment to install if needed
+#library(dplyr)
+
+## alpha function edits transparency of points, on a scale for 0 - transparent, to 1 - full deoth
+ggplot (gapminder) + 
+  aes(x=gdpPercap, y=lifeExp) +
+  geom_point(alpha= 0.2) +
+  labs (title= "Life Expectancy in relation to GDP per capita", x= "GDP per capita", y= "Life Expectancy in years")
+```
+
+More specific, one year only
+
+```{r}
+## even though we installed dplyr in the brain below, we need to pull it from the library to use it
+library(dplyr)
+gapminder_2007 <- gapminder %>% filter(year==2007)
+
+## There are a few new functions that have the same name as other ones in R, replacing it with new and improved versions
+```
+Now we can see values only from 2007
+```{r}
+head(gapminder_2007)
+```
+```{r}
+ggplot(gapminder_2007) +
+  aes(x=gdpPercap, y=lifeExp) +
+  geom_point(alpha=0.4)
+
+```
+Adding more variables to aes()
+
+```{r}
+ggplot(gapminder_2007) +
+  aes(x=gdpPercap, y=lifeExp, color=continent, size=pop) +
+  geom_point(alpha=0.4) +
+  labs(title= "2007 Life Exp vs GDP/capita")
+```
+```{r}
+ggplot(gapminder_2007) +
+  aes(x=gdpPercap) +
+  geom_bar(alpha=0.4) +
+  labs(title= "2007 Life Exp vs GDP/capita")
+```
+
+
+```{r}
+ggplot(mtcars) + 
+aes(x=mpg, y=disp) + 
+geom_point()  
+
+ggplot(mtcars, aes(mpg, disp)) + geom_point()
+```
+
