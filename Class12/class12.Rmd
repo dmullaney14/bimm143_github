@@ -1,0 +1,52 @@
+---
+title: "Class 12 Remote Session"
+author: "Dylan Mullaney"
+date: "2025-02-13"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Section 1. Proportion of G/G in a population
+
+Downloaded csv file from Ensemble < https://useast.ensembl.org/Homo_sapiens/Variation/Sample?db=core;r=17:39766845-40026848;v=rs8067378;vdb=variation;vf=959672880;sample=mex#373531_tablePanel
+
+Here we read this CSV file
+
+```{r}
+mxl <- read.csv("373531-SampleGenotypes-Homo_sapiens_Variation_Sample_rs8067378.csv")
+
+head(mxl)
+```
+
+Pull out just the genotype column
+
+```{r}
+table( mxl$Genotype..forward.strand.)
+
+table( mxl$Genotype..forward.strand.)/ nrow(mxl)
+
+```
+
+Now let's look at a different population and find the proportion of G|G. 
+
+```{r}
+gbr <- read.csv ("gbrdata.csv")
+
+table (gbr$Genotype..forward.strand.) /nrow(gbr)
+```
+
+This variant that is associated with choldhood ashthma is more frequent in the GBR population than the MKL (0.29 vs 0.14).
+
+Finding HG00109
+
+
+
+
+
+
+
+
+
