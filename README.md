@@ -1,6 +1,6 @@
 # BIMM143 Portfolio 
 
-My classwork from W25 [BIMM143](https://bioboot.github.io/bimm143_W25/) at UC San Diego 
+Dylan Mullaney's classwork from W25 [BIMM143](https://bioboot.github.io/bimm143_W25/) at UC San Diego 
 
 - Class 04 [Introduction to R](https://htmlpreview.github.io/?https://raw.githubusercontent.com/dmullaney14/bimm143_github/refs/heads/main/Class04/class04.html)
 
