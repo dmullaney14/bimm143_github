@@ -20,3 +20,17 @@ My classwork from W25 [BIMM143](https://bioboot.github.io/bimm143_W25/) at UC Sa
 
 - Class 12 [Genome Informatics](https://htmlpreview.github.io/?https://raw.githubusercontent.com/dmullaney14/bimm143_github/refs/heads/main/Class12/class%2012.html)
 
+- Class 13 [Transcriptomics and the analysis of RNA-Seq data](https://htmlpreview.github.io/?) need?
+
+- Class 14 [RNA-Seq analysis mini-project](https://htmlpreview.github.io/?https://raw.githubusercontent.com/dmullaney14/bimm143_github/refs/heads/main/Class14/class14.html)
+
+- Class 15 [Explore Github - you're here]
+
+- Class 16 [](https://htmlpreview.github.io/?)
+
+- Class 17 [](https://htmlpreview.github.io/?)
+
+- Class 18 [](https://htmlpreview.github.io/?)
+ 
+- Class 19 [](https://htmlpreview.github.io/?)
+
