@@ -2,7 +2,6 @@
 title: "Class 12 Remote Session"
 author: "Dylan Mullaney"
 date: "2025-02-13"
-output: pdf_document
 output: html
 ---
 

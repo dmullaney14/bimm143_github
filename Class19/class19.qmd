@@ -1,0 +1,60 @@
+---
+title: "Class 19: Cancer Mutation Proj"
+author: "Dylan Mullaney (A16869792)"
+format: html
+---
+
+Read in a fasta file
+
+```{r}
+library(bio3d)
+seq<- read.fasta("A16869792_mutant_seq.fa")
+seq
+
+```
+If identical, print out a 1. If not, print out a different value. 
+```{r}
+score <- conserv(seq)
+score
+```
+
+
+```{r}
+positions <- which (score != 1)
+positions
+residues <- seq$ali[,positions]
+paste(residues[,1], positions, residues[,2], sep="")
+```
+
+Once you get the structure from alphafold3, transfer from cif to pdb
+
+```{r}
+cif.file<- "fold_mutant_protein_model_0.cif"
+x<- read.cif(cif.file)
+write.pdb(x, file="AF_model.pdb")
+```
+
+```{r}
+cif.file1<- "fold_mutant_protein_model_1.cif"
+x<- read.cif(cif.file1)
+write.pdb(x, file="AF_model1.pdb")
+```
+
+```{r}
+cif.file2<- "fold_mutant_protein_model_2.cif"
+x<- read.cif(cif.file2)
+write.pdb(x, file="AF_model2.pdb")
+```
+
+```{r}
+cif.file3<- "fold_mutant_protein_model_3.cif"
+x<- read.cif(cif.file3)
+write.pdb(x, file="AF_model3.pdb")
+```
+
+```{r}
+cif.file4<- "fold_mutant_protein_model_4.cif"
+x<- read.cif(cif.file4)
+write.pdb(x, file="AF_model4.pdb")
+```
+
