@@ -26,11 +26,11 @@ My classwork from W25 [BIMM143](https://bioboot.github.io/bimm143_W25/) at UC Sa
 
 - Class 15 [Explore Github - you're here]
 
-- Class 16 [](https://htmlpreview.github.io/?)
+- Class 16 [Essential UNIX for bioinformatics]
 
-- Class 17 [](https://htmlpreview.github.io/?)
+- Class 17 [Analyzing sequencing data in the cloud](https://htmlpreview.github.io/?)
 
-- Class 18 [](https://htmlpreview.github.io/?)
+- Class 18 [Investigating Pertussis Resurgence mini project](https://htmlpreview.github.io/?)
  
-- Class 19 [](https://htmlpreview.github.io/?)
+- Class 19 [Cancer Mutation Analysis mini project](https://htmlpreview.github.io/?)
 
