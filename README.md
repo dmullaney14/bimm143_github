@@ -18,3 +18,5 @@ My classwork from W25 [BIMM143](https://bioboot.github.io/bimm143_W25/) at UC Sa
 
 - Class 11 [AlphaFold](https://htmlpreview.github.io/?https://raw.githubusercontent.com/dmullaney14/bimm143_github/refs/heads/main/Class10%3A11/class10.html)
 
+- Class 12 [Genome Informatics](https://htmlpreview.github.io/?https://raw.githubusercontent.com/dmullaney14/bimm143_github/refs/heads/main/Class12/class%2012.html)
+
