@@ -1,7 +1,7 @@
 ---
 title: "Class 13: RNA-Seq"
 author: "Dylan Mullaney (A16869793)"
-format: pdf
+format: html
 ---
 
 Today we will analyze from a published RNA-Seq experiment where airway smooth muscle tissue cells were treated with dexamenthasone, a synthetic glucocortocoid steroid with anti-inflammatory effects (Himes et. al, 2014).
