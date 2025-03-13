@@ -31,10 +31,8 @@ Gonly
 ```
 
 ```{r}
-
-
-Aonly.mean <- rowSums(Aonly)/ ncol(Aonly)
-head(Aonly.mean)
+#Aonly.mean <- rowSums(Aonly)/ ncol(Aonly)
+#head(Aonly.mean)
 ```
 
 

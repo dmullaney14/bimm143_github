@@ -2,9 +2,9 @@
 title: "Class 12 Remote Session"
 author: "Dylan Mullaney"
 date: "2025-02-13"
-output: pdf_document
-output: html
+format: html
 ---
+
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
@@ -42,12 +42,3 @@ table (gbr$Genotype..forward.strand.) /nrow(gbr)
 This variant that is associated with choldhood ashthma is more frequent in the GBR population than the MKL (0.29 vs 0.14).
 
 Finding HG00109
-
-
-
-
-
-
-
-
-
